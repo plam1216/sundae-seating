@@ -9,7 +9,8 @@ interface Seat {
 }
 
 interface initialState {
-    seats: Seat[]
+    seats: Seat[],
+    status: string
 }
 
 // 10 available seats
@@ -26,16 +27,16 @@ const initialState: initialState = {
         { id: 9, isAvailable: true },
         { id: 10, isAvailable: true },
     ],
+    status: 'idle'
 }
 
-// - The data flow from the Firebase database must be set up using async thunks.
-// export const fetchSeats = createAsyncThunk('seats/fetchSeats', async () => {
-//     const seatCountRef = ref(database, 'seats')
-//     const snapshot = await get(seatCountRef)
-//     console.log(snapshot)
+export const fetchSeats = createAsyncThunk('seats/fetchSeats', async () => {
+    const seatCountRef = ref(database, 'seats')
+    const snapshot = await get(seatCountRef)
+    console.log("snapshot.val", snapshot.val)
 
-//     return snapshot.val
-// })
+    return snapshot.val
+})
 
 
 export const seatsSlice = createSlice({
@@ -57,21 +58,21 @@ export const seatsSlice = createSlice({
         }
 
     },
-    // extraReducers(builder) {
-        // builder
-        // .addCase(fetchSeats.pending, (state, action) => {
-        //     state.status = 'loading'
-        // })
-        // .addCase(fetchSeats.fulfilled, (state, action) => {
-        //     state.status = 'succeeded'
-        //     console.log("succeeded")
-        //     // do something
-        // })
-        // .addCase(fetchSeats.rejected, (state, action) => {
-        //     state.status = 'failed'
-        //     state.error = action.error.message || 'error while fetching'
-        // })
-    // }
+    extraReducers(builder) {
+        builder
+        .addCase(fetchSeats.pending, (state, action) => {
+            state.status = 'loading'
+            console.log("extraReducers: loading")
+        })
+        .addCase(fetchSeats.fulfilled, (state, action) => {
+            state.status = 'succeeded'
+            console.log("extraReducers: succeeded")
+        })
+        .addCase(fetchSeats.rejected, (state, action) => {
+            state.status = 'failed'
+            console.log("extraReducers: failed")
+        })
+    }
 })
 
 export const { seatUpdated } = seatsSlice.actions
