@@ -1,0 +1,9 @@
+.seats {
+    display: flex;
+    justify-content: center;
+}
+
+.seat-container {
+    display: flex;
+    flex-direction: column;
+}

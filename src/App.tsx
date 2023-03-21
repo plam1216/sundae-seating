@@ -1,15 +1,11 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
-
-import Queue from './features/Queue/Queue'
-import Seat from './features/Seat/Seat';
+import Seats from './features/Seats/Seats';
 
 function App() {
   return (
     <div className="App">
-      <Queue />
-      {/* <Seat /> */}
+      <Seats />
     </div>
   );
 }

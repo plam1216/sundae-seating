@@ -1,25 +1,50 @@
 import React from 'react'
+import { CheckCircle, CheckCircleFill } from 'react-bootstrap-icons'
 
 import { useAppSelector, useAppDispatch } from '../../app/hooks'
-import { decrement } from '../Queue/queueSlice'
+import { seatUpdated } from '../Seats/seatsSlice'
 
 
-// - The project must display a live queue of 10 seats that can be selected by anonymous users.
-
-const handleClick = () => {
-    console.log("clicking")
+interface SeatProps {
+    id: number,
+    isAvailable: boolean
 }
 
-const Seat = () => {
+const Seat = (props: SeatProps) => {
     const dispatch = useAppDispatch()
+
+    // console.log(props.isAvailable)
+
     return (
-        <div>
-            <span onClick={() => {
-                dispatch(decrement())
-            }}
-            >Seat
-            </span>
-        </div>
+        <>
+            {
+                // don't let user click if Filled circle!
+                props.isAvailable ?
+                    <div
+                        className="seat"
+                        style={{ margin: '5px' }}
+                        onClick={() => {
+                            // change isAvailable to false
+                            console.log("clicking")
+                            dispatch(seatUpdated(props.id))
+                        }}
+                    >
+                        <CheckCircle />
+                    </div>
+                    :
+                    <div
+                        className="seat"
+                        style={{ margin: '5px' }}
+                        onClick={() => {
+                            // change isAvailable to true
+                            console.log("clicking")
+                            dispatch(seatUpdated(props.id))
+                        }}
+                    >
+                        <CheckCircleFill />
+                    </div>
+            }
+        </>
     )
 }
 

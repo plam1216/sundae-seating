@@ -1,9 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit'
-import queueReducer from '../features/Queue/queueSlice'
+import seatsReducer from '../features/Seats/seatsSlice'
 
 export const store = configureStore({
   reducer: {
-    queue: queueReducer,
+    seats: seatsReducer,
   },
 })
 
