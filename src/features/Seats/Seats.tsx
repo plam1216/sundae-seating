@@ -17,8 +17,8 @@ const Seats = () => {
     const [seats, setSeats] = useState<SeatInterface[]>([] as SeatInterface[])
     const seatsStatus = useAppSelector(state => state.seats.status)
 
-    console.log("seats", seats)
-    console.log("status: ", seatsStatus)
+    console.log("seats state", seats)
+    // console.log("status: ", seatsStatus)
 
 
     useEffect(() => {

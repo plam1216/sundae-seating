@@ -25,9 +25,8 @@ const Seat = (props: SeatProps) => {
                         style={{ margin: '5px' }}
                         onClick={() => {
                             // change isAvailable to false & get updated seats
-                            console.log("clicking")
                             dispatch(seatUpdated(props.id))
-                            // dispatch(fetchSeats)
+                            // dispatch(fetchSeats())
                         }}
                     >
                         <CheckCircle />
@@ -38,9 +37,8 @@ const Seat = (props: SeatProps) => {
                         style={{ margin: '5px' }}
                         onClick={() => {
                             // change isAvailable to true & get updated seats
-                            console.log("clicking")
                             dispatch(seatUpdated(props.id))
-                            // dispatch(fetchSeats)
+                            // dispatch(fetchSeats())
                         }}
                     >
                         <CheckCircleFill />

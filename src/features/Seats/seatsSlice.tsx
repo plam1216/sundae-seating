@@ -40,26 +40,38 @@ export const seatsSlice = createSlice({
     name: 'seats',
     initialState,
     reducers: {
+        // ~ NOT Working
         seatUpdated(state, action) {
             const id = action.payload
             const existingSeat = state.data.find(seat => seat.id === id)
-            if(existingSeat) {
+            if (existingSeat) {
                 console.log("existingSeat.isAvailable: ", existingSeat.isAvailable)
-                if(existingSeat.isAvailable) {
+                if (existingSeat.isAvailable) {
                     // existingSeat.isAvailable = false
-                    console.log("changed to false")
+                    // console.log("changed to false")
+
+                    const seatCountRef = ref(database, "seats/data/" + `${existingSeat.id}`)
+                    console.log("seatCountRef", seatCountRef)
+
+                    // check if currSeat is changing
+                    const getCurrSeat = async () => {
+                        const currSeat = await get(seatCountRef)
+                        console.log("currSeat", currSeat.val())
+                    }
+
+                    getCurrSeat()
+
                     
-                    const seatCountRef = ref(database, "seats/data/"+`${existingSeat.id}`)
-                    update(seatCountRef, {isAvailable: false})
-                    // fetchSeats()
+                    update(seatCountRef, { isAvailable: false })
+
                 } else {
                     // existingSeat.isAvailable = true
                     console.log("changed to true")
 
-                    const seatCountRef = ref(database, "seats/data"+`${existingSeat.id}`)
-                    update(seatCountRef, {isAvailable: true})
-                    // fetchSeats()
-                    
+                    const seatCountRef = ref(database, "seats/data/" + `${existingSeat.id}`)
+                    // console.log("seatCountRef", seatCountRef)
+
+                    update(seatCountRef, { isAvailable: true })
                 }
             }
         }
@@ -67,18 +79,18 @@ export const seatsSlice = createSlice({
     },
     extraReducers(builder) {
         builder
-        .addCase(fetchSeats.pending, (state, action) => {
-            state.status = 'loading'
-            console.log("extraReducers: loading")
-        })
-        .addCase(fetchSeats.fulfilled, (state, action) => {
-            state.status = 'succeeded'
-            console.log("extraReducers: succeeded")
-        })
-        .addCase(fetchSeats.rejected, (state, action) => {
-            state.status = 'failed'
-            console.log("extraReducers: failed")
-        })
+            .addCase(fetchSeats.pending, (state, action) => {
+                state.status = 'loading'
+                console.log("extraReducers: loading")
+            })
+            .addCase(fetchSeats.fulfilled, (state, action) => {
+                state.status = 'succeeded'
+                console.log("extraReducers: succeeded")
+            })
+            .addCase(fetchSeats.rejected, (state, action) => {
+                state.status = 'failed'
+                console.log("extraReducers: failed")
+            })
     }
 })
 
