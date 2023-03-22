@@ -3,30 +3,42 @@ import React, { useState, useEffect } from 'react'
 import { useAppSelector, useAppDispatch } from '../../app/hooks'
 
 import Seat from '../Seat/Seat'
-import { selectAllSeats } from './seatsSlice'
+// import { selectAllSeats } from './seatsSlice'
 import { fetchSeats } from './seatsSlice'
+
+import { Seat as SeatInterface } from '../../types'
 
 import './Seats.css'
 
 const Seats = () => {
     const dispatch = useAppDispatch()
 
-    // seats value = initialState
-    const seats = useAppSelector(selectAllSeats)
-    const status = useAppSelector(state => state.seats.status)
+    // const seats = useAppSelector(selectAllSeats)
+    const [seats, setSeats] = useState<SeatInterface[]>([] as SeatInterface[])
+    const seatsStatus = useAppSelector(state => state.seats.status)
 
     console.log("seats", seats)
-    console.log("status: ", status)
+    console.log("status: ", seatsStatus)
 
 
     useEffect(() => {
-        if (status === 'idle') {
-            dispatch(fetchSeats())
+        const getData = async () => {
+            const response = await dispatch(fetchSeats())
+            console.log("fetch response", response)
+            
+            const data = response.payload.data
+            console.log("data payload", data)
+
+            setSeats(data)
         }
-    }, [status, dispatch])
+
+        if (seatsStatus === 'idle') {
+            getData()
+        }
+    }, [seatsStatus, dispatch])
 
     // show all available seats
-    const displaySeats = seats.seats.map((seat, index) => (
+    const displaySeats = seats.map((seat, index) => (
         <>
             <div
                 className="seat-container"

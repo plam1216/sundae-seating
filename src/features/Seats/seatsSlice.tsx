@@ -1,41 +1,38 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { getDatabase, ref, get } from "firebase/database";
+import { getDatabase, ref, get, set, update } from "firebase/database";
 import { database } from "../../services/firebase"
+import { Seat, Seats } from "../../types";
 
-
-interface Seat {
-    id: number,
-    isAvailable: boolean
-}
-
-interface initialState {
-    seats: Seat[],
-    status: string
-}
 
 // 10 available seats
-const initialState: initialState = {
-    seats: [
+const initialState: Seats = {
+    data: [
+        { id: 0, isAvailable: true },
         { id: 1, isAvailable: true },
         { id: 2, isAvailable: true },
         { id: 3, isAvailable: true },
         { id: 4, isAvailable: true },
         { id: 5, isAvailable: true },
         { id: 6, isAvailable: true },
-        { id: 7, isAvailable: false },
+        { id: 7, isAvailable: true },
         { id: 8, isAvailable: true },
         { id: 9, isAvailable: true },
-        { id: 10, isAvailable: true },
     ],
     status: 'idle'
 }
 
+const seatCountRef = ref(database, "seats")
+set(seatCountRef, initialState)
+
+
+// fetch data from Firebase
 export const fetchSeats = createAsyncThunk('seats/fetchSeats', async () => {
     const seatCountRef = ref(database, 'seats')
     const snapshot = await get(seatCountRef)
-    console.log("snapshot.val", snapshot.val)
+    const data = snapshot.val()
+    console.log("fetchSeats data", data)
 
-    return snapshot.val
+    return data
 })
 
 
@@ -45,14 +42,24 @@ export const seatsSlice = createSlice({
     reducers: {
         seatUpdated(state, action) {
             const id = action.payload
-            const existingSeat = state.seats.find(seat => seat.id === id)
+            const existingSeat = state.data.find(seat => seat.id === id)
             if(existingSeat) {
+                console.log("existingSeat.isAvailable: ", existingSeat.isAvailable)
                 if(existingSeat.isAvailable) {
-                    existingSeat.isAvailable = false
+                    // existingSeat.isAvailable = false
                     console.log("changed to false")
+                    
+                    const seatCountRef = ref(database, "seats/data/"+`${existingSeat.id}`)
+                    update(seatCountRef, {isAvailable: false})
+                    // fetchSeats()
                 } else {
-                    existingSeat.isAvailable = true
+                    // existingSeat.isAvailable = true
                     console.log("changed to true")
+
+                    const seatCountRef = ref(database, "seats/data"+`${existingSeat.id}`)
+                    update(seatCountRef, {isAvailable: true})
+                    // fetchSeats()
+                    
                 }
             }
         }
@@ -79,4 +86,4 @@ export const { seatUpdated } = seatsSlice.actions
 
 export default seatsSlice.reducer
 
-export const selectAllSeats = (state: { seats: initialState }) => state.seats
+// export const selectAllSeats = (state: { seats: Seats }) => state.seats

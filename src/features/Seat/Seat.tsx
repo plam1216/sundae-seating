@@ -2,7 +2,7 @@ import React from 'react'
 import { CheckCircle, CheckCircleFill } from 'react-bootstrap-icons'
 
 import { useAppSelector, useAppDispatch } from '../../app/hooks'
-import { seatUpdated } from '../Seats/seatsSlice'
+import { fetchSeats, seatUpdated } from '../Seats/seatsSlice'
 
 
 interface SeatProps {
@@ -13,7 +13,7 @@ interface SeatProps {
 const Seat = (props: SeatProps) => {
     const dispatch = useAppDispatch()
 
-    // console.log(props.isAvailable)
+    // console.log("isAvailable?", props.isAvailable)
 
     return (
         <>
@@ -24,9 +24,10 @@ const Seat = (props: SeatProps) => {
                         className="seat"
                         style={{ margin: '5px' }}
                         onClick={() => {
-                            // change isAvailable to false
+                            // change isAvailable to false & get updated seats
                             console.log("clicking")
                             dispatch(seatUpdated(props.id))
+                            // dispatch(fetchSeats)
                         }}
                     >
                         <CheckCircle />
@@ -36,9 +37,10 @@ const Seat = (props: SeatProps) => {
                         className="seat"
                         style={{ margin: '5px' }}
                         onClick={() => {
-                            // change isAvailable to true
+                            // change isAvailable to true & get updated seats
                             console.log("clicking")
                             dispatch(seatUpdated(props.id))
+                            // dispatch(fetchSeats)
                         }}
                     >
                         <CheckCircleFill />
