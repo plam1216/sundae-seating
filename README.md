@@ -1,4 +1,4 @@
-[https://sundae-seating.web.app/](Demo)
+[Demo](https://sundae-seating.web.app/)
 
 To Run Locally:
 - Clone Repo
